@@ -1,0 +1,75 @@
+server: 
+  context-path: /
+  session:
+    cookie:
+      name: OAUTH2SESSION
+  error:
+    whitelabel:
+      enabled: false
+
+spring:
+  profiles: 
+    active: loc
+  datasource: 
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari: 
+      connection-timeout: 30000
+      idle-timeout: 600000
+      minimum-idle: 2
+      maximum-pool-size: 30
+      pool-name: HikariPool
+      connection-test-query: SELECT 1
+      data-source-properties: 
+        cache-prep-stmts: true
+        prep-stmt-cache-size: 256
+        prep-stmt-cache-sql-limit: 2048
+        use-server-prep-stmts: true
+  jpa: 
+    show-sql: true
+    properties: 
+      hibernate: 
+        use_sql_comments: true
+        format_sql: true
+
+security: 
+  basic:
+    enabled: false
+  auth: 
+    query: 
+      users-by-username: SELECT username, password, enabled FROM user WHERE username = ?
+      authorities-by-username: SELECT user.username, role.name FROM user LEFT JOIN role ON role.user_seq = user.seq WHERE user.username = ?
+  remember-me: 
+    key: uniqueAndSecret
+    parameter: remember-me
+    token-validity-seconds: 1209600
+  oauth2: 
+    keystore: 
+      jks: authkeystore.jks
+      storepass: password
+      key-pair: authpair
+    authorization: 
+      token-key-access: isAuthenticated()
+    client: 
+      id: your-client-id
+      client-id: client
+      client-secret: secret
+      access-token-validity-seconds: 86400
+      refresh-token-validity-seconds: 86400
+      token-name: access-token
+      scope: read,trust
+      grant-type: password
+      use-current-uri: true
+    resource: 
+      id: your-resource-id
+      filter-order: 3
+
+logging:
+  config: classpath:logback-spring.xml
+  file: resource
+
+springfox: 
+  documentation: 
+    swagger: 
+      enabled: true
+      v2: 
+        path: /v2/api-docs

@@ -1,0 +1,35 @@
+server: 
+  port: 80
+
+spring: 
+  profiles: dev
+#  datasource: 
+#    driver-class-name: com.mysql.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/appdb?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&useSSL=false
+#    username: admin
+#    password: password
+#  jpa: 
+#    database: mysql
+#    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+#    hibernate: 
+#      ddl-auto: update
+  datasource: 
+    url: jdbc:h2:mem:appdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password: 
+  jpa: 
+    database: h2
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate: 
+      ddl-auto: update
+
+security: 
+  oauth2: 
+    resource: 
+      jwt: 
+        # Tells the JWT framework to fetch the public key from the authorization server during startup
+        # Note: The authorization server needs to be running...
+        key-uri: http://localhost:8080/oauth/token_key
+
+logging: 
+  path: /var/log/logback
